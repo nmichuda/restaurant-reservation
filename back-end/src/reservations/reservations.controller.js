@@ -44,6 +44,21 @@ function hasValidDate(req,res,next){
       message: 'must book date in the future'
     })
   }
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  if(hours < 10 || hours > 21){
+    return next({
+      status: 400,
+      message: 'Cannot make reseravtion at that time. Operating hours are from 10:30AM to 10:30PM'
+    })
+  }
+  if((hours === 10 && minutes <30) || (hours === 21 && minutes > 30)){
+    return next({
+      status: 400,
+      message: 'Cannot make reseravtion at that time. Operating hours are from 10:30AM to 10:30PM'
+    })
+  }
+
   next();
 }
 function hasValidPeople(req,res,next){
