@@ -22,7 +22,7 @@ export function isValidReservation(reservation){
     const hours = time.substring(0,2);
     const minutes = time.substring(3,5);
 
-    if(hours < 10 || hours > 9){
+    if(hours < 10 || hours > 21){
         errors.push(new Error("Cannot make reseravtion at that time. Operating hours are from 10:30AM to 10:30PM"))
     }
     else if((hours === 10 && minutes <30) || (hours === 21 && minutes > 30)){

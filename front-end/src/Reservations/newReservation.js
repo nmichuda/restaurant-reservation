@@ -14,7 +14,7 @@ function NewReservation() {
     const [time,setTime] = useState("");
     const [people,setPeople] = useState(1);
     const history = useHistory();
-    const [errors,setErrors] = useState(null);
+    const [errors,setErrors] = useState([]);
 
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);

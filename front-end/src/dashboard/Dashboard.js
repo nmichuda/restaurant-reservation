@@ -3,6 +3,8 @@ import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, next, today } from "../utils/date-time";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import TableList from "../Tables/tableList";
+import ListReservations from "../Reservations/listReservations";
 
 /**
  * Defines the dashboard page.
@@ -14,7 +16,7 @@ function Dashboard({ date }) {
   const history = useHistory();
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
+  
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
@@ -25,9 +27,9 @@ function Dashboard({ date }) {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    listTables(abortController.signal)
+    listTables()
       .then(setTables)
-      .catch(setTablesError);
+      
     return () => abortController.abort();
   }
   
@@ -39,7 +41,9 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for {date}: </h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
+     
+      <ListReservations reservations={reservations}/>
+      <TableList tables = {tables}/>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${today()}`)}>Today</button>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${next(date)}`)}>Next</button>

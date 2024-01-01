@@ -3,8 +3,8 @@ exports.up = function (knex) {
       table.increments("table_id").primary();
       table.string("table_name").notNullable();
       table.integer("capacity").notNullable();
-      table.boolean("occupied").defaultTo(false).notNullable();
       table.integer("reservation_id").references("reservation_id").inTable("reservations").nullable();
+      table.boolean("occupied").defaultTo(false).notNullable();
       table.timestamps(true, true);
     });
   };
