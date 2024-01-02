@@ -1,7 +1,9 @@
 const service = require("./tables.service");
+const reservationController = require("../reservations/reservations.controller")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasAllProperties = hasProperties("table_name", "capacity");
+const hasReservationId = hasProperties("reservation_id");
 
 
 /**
@@ -19,6 +21,21 @@ async function create(req, res) {
   res.status(201).json({ data });
 }
 
+async function tableExists(req,res,next){
+    const table_id = req.params.table_id;
+    const table = await service.read(table_id);
+    if(table){
+        res.locals.table = table;
+        return next();
+    }
+    else{
+        next({
+            status: 404,
+            message: `Table ${table_id} not found.`
+        })
+    }
+}
+
 
 
 function nameIsValid(req,res,next){
@@ -26,7 +43,7 @@ function nameIsValid(req,res,next){
     if(table_name.length < 2){
         return next({
             status: 400,
-            message: "name length is not long enough. must be at least 2 characters."
+            message: "table_name is not long enough. must be at least 2 characters."
         })
     }
     next();
@@ -45,12 +62,59 @@ function capacityIsValid(req,res,next){
 }
 
 function capacityIsEnough(req,res,next){
+    const capacity = res.locals.table.capacity;
+    const guests = res.locals.reservation.people;
 
+    if(guests > capacity){
+        return next({
+            status: 400,
+            message: "table capacity is not enough for that number of people"
+        })
+    }
+    next();
+    
 }
 
+async function update(req,res,next){
+    const {reservation_id} = req.body.data;
+    const data = await service.update(
+        reservation_id, res.locals.table.table_id
+    );
+    res.status(200).json({data});
+}
+
+function isTableFull(req,res,next){
+    if(!res.locals.table.occupied){
+        return next({
+            status: 400,
+            message: "table is not occupied"
+        })
+    }
+    next();
+}
+function isReservationSeated(req,res,next){
+    if(res.locals.reservation.status === "seated"){
+        return next({
+            status: 400,
+            message: "reservation is already seated"
+        })
+    }
+    next();
+}
+
+function isTableEmpty(req,res,next){
+    if(res.locals.table.occupied){
+        return next({
+            status: 400,
+            message: "table is occupied"
+        })
+    }
+    next();
+}
 
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [hasAllProperties, nameIsValid, capacityIsValid, asyncErrorBoundary(create)],
+  update: [asyncErrorBoundary(tableExists),hasReservationId, reservationController.reservationExists, capacityIsEnough, isReservationSeated, isTableEmpty, asyncErrorBoundary(update)]
 };

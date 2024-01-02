@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { listTables } from "../utils/api";
 import CancelButton from "../layout/CancelButton";
+import { updateTable } from "../utils/api";
+
 
 import { fetchReservation } from "../utils/api";
 export const SeatReservation = () =>{
@@ -12,6 +14,7 @@ export const SeatReservation = () =>{
     const [tableId, setTableId] = useState("");
     const [reservation, setReservation] = useState({})
     const handleIdChange = (event) => setTableId(event.target.value);
+    const history = useHistory();
 
 
     useEffect(()=>{
@@ -23,6 +26,8 @@ export const SeatReservation = () =>{
 
     const handleSubmit = async(event) =>{
         event.preventDefault();
+        await updateTable(reservation.reservation_id, tableId);
+        history.push("/dashboard");
         
     }
     return (

@@ -108,7 +108,7 @@ async function reservationExists(req, res, next) {
 } 
 
 async function readReservation(req, res, next) {
-  console.log("why are you fetching")
+
   const data = res.locals.reservation;
   res.json({ data });
 }
@@ -123,4 +123,5 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [reservationExists, asyncErrorBoundary(readReservation)],
+  reservationExists
 };
