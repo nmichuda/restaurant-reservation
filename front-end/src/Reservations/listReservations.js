@@ -1,43 +1,54 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
+function formatTime(time) {
+  let hours = time.substring(0, 2);
+  const minutes = time.substring(3, 5);
+  let post = "AM";
+  if (hours > 12) {
+    hours = 24 - hours;
+    post = "PM";
+  }
+
+  return hours + ":" + minutes + post;
+}
+
 export const ListReservations = ({ reservations }) => {
-  function formatTime(time) {
-    let hours = time.substring(0, 2);
-    const minutes = time.substring(3, 5);
-    let post = "AM";
-    if (hours > 12) {
-      hours = 24 - hours;
-      post = "PM";
-    }
+  let resMap = "";
+  if (reservations.length) {
 
-    return hours + ":" + minutes + post;
+    resMap = reservations.map((reservation, index) => {
+      
+      return (
+        <div>
+          {reservation.status === "booked" ? (
+            <div className="reservations" key={index}>
+              <div>
+                <h5>
+                  {reservation.first_name} {reservation.last_name}
+                </h5>
+              </div>
+              <p>{reservation.people} Guests</p>
+              <p>{formatTime(reservation.reservation_time)}</p>
+
+              <div>
+                <Link
+                  className="item"
+                  to={`/reservations/${reservation.reservation_id}/seat`}
+                >
+                  Seat
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="reservations" key={index}></div>
+          )}
+        </div>
+      );
+    });
+    
   }
-  function listReservations(reservations) {
-    if (reservations.length) {
-      return reservations.map((reservation) => {
-        return (
-          <div>{reservation.status === "booked" ? <div className="reservations" key={reservation.reservation_id}>
-          <div>
-            <h5>
-              {reservation.first_name} {reservation.last_name}
-            </h5>
-          </div>
-          <p>{reservation.people} Guests</p>
-          <p>{formatTime(reservation.reservation_time)}</p>
-
-          <div>
-            <Link className="item" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
-          </div>
-        </div> : ""}
-          
-          </div>
-        );
-      });
-    }
-  }
-
-  return <div>{listReservations(reservations)}</div>;
+  return <div>{resMap}</div>
 };
 
 export default ListReservations;
