@@ -8,7 +8,7 @@ function CancelButton(){
 
     const history = useHistory();
     return(
-        <button type="button" onClick={()=>history.push('/')}>Cancel</button>
+        <button type="button" onClick={()=>history.go(-1)}>Cancel</button>
 
 
     )

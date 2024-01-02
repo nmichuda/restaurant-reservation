@@ -17,18 +17,20 @@ export const ListReservations = ({ reservations }) => {
     if (reservations.length) {
       return reservations.map((reservation) => {
         return (
-          <div className="reservations" key={reservation.reservation_id}>
-            <div>
-              <h5>
-                {reservation.first_name} {reservation.last_name}
-              </h5>
-            </div>
-            <p>{reservation.people} Guests</p>
-            <p>{formatTime(reservation.reservation_time)}</p>
+          <div>{reservation.status === "booked" ? <div className="reservations" key={reservation.reservation_id}>
+          <div>
+            <h5>
+              {reservation.first_name} {reservation.last_name}
+            </h5>
+          </div>
+          <p>{reservation.people} Guests</p>
+          <p>{formatTime(reservation.reservation_time)}</p>
 
-            <div>
-              <Link className="item" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
-            </div>
+          <div>
+            <Link className="item" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
+          </div>
+        </div> : ""}
+          
           </div>
         );
       });
