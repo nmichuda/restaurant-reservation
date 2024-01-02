@@ -1,6 +1,12 @@
 import React from "react";
+import { finishTable } from "../utils/api";
+import { useHistory } from "react-router-dom";
+
+
 
 export const TableList = ({ tables }) => {
+  const history = useHistory();
+  
   return (
     <div className="container-fluid d-flex">
       {tables.map((table) => (
@@ -14,6 +20,14 @@ export const TableList = ({ tables }) => {
               {" "}
               <b>{table.occupied ? "occupied" : "free"}</b>
             </h5>
+            <div>{table.occupied ? <button className="finish" data-table-id-finish={table.table_id} onClick={()=>{
+              finishTable(table.table_id);
+
+              setTimeout(history.go("/dashboard"), 100)}
+            
+            }>Finish</button> : ""}
+            
+            </div>
           </div>
           </div>
           </div>

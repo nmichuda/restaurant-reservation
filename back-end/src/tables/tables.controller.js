@@ -2,6 +2,7 @@ const service = require("./tables.service");
 const reservationController = require("../reservations/reservations.controller")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const { as } = require("../db/connection");
 const hasAllProperties = hasProperties("table_name", "capacity");
 const hasReservationId = hasProperties("reservation_id");
 
@@ -112,9 +113,15 @@ function isTableEmpty(req,res,next){
     next();
 }
 
+async function finishTable(req,res,next){
+    const data = await service.finish(res.locals.table.reservation_id, res.locals.table.table_id);
+    res.status(200).json({data});
+}
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [hasAllProperties, nameIsValid, capacityIsValid, asyncErrorBoundary(create)],
-  update: [asyncErrorBoundary(tableExists),hasReservationId, reservationController.reservationExists, capacityIsEnough, isReservationSeated, isTableEmpty, asyncErrorBoundary(update)]
+  update: [asyncErrorBoundary(tableExists),hasReservationId, reservationController.reservationExists, capacityIsEnough, isReservationSeated, isTableEmpty, asyncErrorBoundary(update)],
+  finish: [asyncErrorBoundary(tableExists),isTableFull, asyncErrorBoundary(finishTable)],
 };
