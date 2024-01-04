@@ -53,11 +53,11 @@ function nameIsValid(req,res,next){
 function capacityIsValid(req,res,next){
     const capacity = req.body.data.capacity;
 
-    if(capacity < 1 || isNaN(capacity)){
+    if(capacity < 1 || typeof capacity !== 'number'){
         return next({
             status: 400,
-            message: "invalid capacity"
-        })
+            message: "invalid capacity",
+        });
     }
     next();
 }

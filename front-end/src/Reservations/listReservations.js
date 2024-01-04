@@ -21,7 +21,7 @@ export const ListReservations = ({ reservations }) => {
       
       return (
         <div>
-          {reservation.status === "booked" ? (
+          {reservation.status === "booked" || reservation.status === "seated" ? (
             <div className="reservations" key={index}>
               <div>
                 <h5>
@@ -30,6 +30,7 @@ export const ListReservations = ({ reservations }) => {
               </div>
               <p>{reservation.people} Guests</p>
               <p>{formatTime(reservation.reservation_time)}</p>
+              <p data-reservation-id-status={reservation.reservation_id}>{reservation.status}</p>
 
               <div>
                 <Link
