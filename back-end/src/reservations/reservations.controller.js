@@ -15,7 +15,8 @@ const hasAllProperties = hasProperties(
  */
 async function list(req, res) {
   const date = req.query.date;
-  const data = await service.list(date);
+  const mobile_number = req.query.mobile_number
+  const data = await (date? service.list(date): service.search(mobile_number));
   res.json({ data });
 }
 
@@ -94,7 +95,8 @@ function hasValidTime(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  const reservation_id = req.params.reservation_id || (req.body.data || {}).reservation_id;
+  const reservation_id =
+    req.params.reservation_id || (req.body.data || {}).reservation_id;
 
   const reservation = await service.read(reservation_id);
   if (reservation) {
@@ -105,40 +107,56 @@ async function reservationExists(req, res, next) {
     status: 404,
     message: `Reservation ${reservation_id} cannot be found.`,
   });
-} 
+}
 
 async function readReservation(req, res, next) {
-
   const data = res.locals.reservation;
   res.json({ data });
 }
 
-async function updateStatus(req,res,next){
-  const reservation = res.locals.reservation;
-  const status = req.params.status;
-  const data = await service.updateStatus(reservation.reservation_id, status);
-  res.json({data});
-}
-
-function hasValidStatus(req,res,next){
-  const {status} = req.body.data;
+function hasValidStatus(req, res, next) {
+  const { status } = req.body.data;
   const curStatus = res.locals.reservation.status;
 
-  if(curStatus === "finished" || curStatus === "cancelled"){
+  if (curStatus === "finished" || curStatus === "cancelled") {
     next({
       status: 400,
-      message: "reservation is already finished/cancelled"
-    })
+      message: "reservation is already finished/cancelled",
+    });
   }
-  const statusArray = ["booked", "finished", "cancelled", "seated"];
-  if(statusArray.includes(status)){
+  
+  if (status === "booked" || status === "cancelled" || status === "finished" || status === "seated") {
+    res.locals.status = status;
     next();
   }
+  else{
   next({
     status: 400,
-    message: `invalid status ${status}`
-  })
+    message: `invalid status ${status}`,
+  });
 }
+}
+
+async function updateStatus(req, res) {
+  const status = res.locals.status;
+  const reservation_id = res.locals.reservation.reservation_id;
+  
+  const data = await service.updateStatus(reservation_id, status);
+  
+  res.status(200).json({ data });
+}
+
+function newStatus(req, res, next) {
+  const { status } = req.body.data;
+  if (status && status !== "booked") {
+    return next({
+      status: 400,
+      message: `invalid status ${status}`,
+    });
+  }
+  next();
+}
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
@@ -147,10 +165,15 @@ module.exports = {
     hasValidDate,
     hasValidPeople,
     hasValidTime,
+    newStatus,
     asyncErrorBoundary(create),
   ],
   read: [reservationExists, asyncErrorBoundary(readReservation)],
+  updateStatus: [
+    reservationExists,
+    hasValidStatus,
+    asyncErrorBoundary(updateStatus),
+  ],
   reservationExists,
-  updateStatus: [reservationExists, hasValidStatus, asyncErrorBoundary(updateStatus)],
   
 };

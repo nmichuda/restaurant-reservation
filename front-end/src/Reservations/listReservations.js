@@ -25,15 +25,19 @@ function formatTime(time) {
  */
 
 
-export const ListReservations = ({ reservations }) => {
+export const ListReservations = ({ reservations, filter }) => {
   let resMap = "";
-  if (reservations.length) {
+  let filterReservations = reservations;
+  if(filter){
+    filterReservations = reservations.filter((res)=>(res.status === "booked" || res.status === "seated"));
+  }
+  
+  if (filterReservations.length) {
 
-    resMap = reservations.map((reservation, index) => {
+    resMap = filterReservations.map((reservation, index) => {
       
       return (
         <div>
-          {reservation.status === "booked" || reservation.status === "seated" ? (
             <div className="reservations" key={index}>
               <div>
                 <h5>
@@ -54,13 +58,14 @@ export const ListReservations = ({ reservations }) => {
               </div>
               ): ""}
             </div>
-          ) : (
-            <div className="reservations" key={index}></div>
-          )}
+          
         </div>
       );
     });
     
+  }
+  else{
+    return <p>No reservations found.</p>
   }
   return <div>{resMap}</div>
 };

@@ -42,7 +42,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
      
-      <ListReservations reservations={reservations}/>
+      <ListReservations reservations={reservations} filter={true}/>
       <TableList tables = {tables}/>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${today()}`)}>Today</button>
