@@ -21,10 +21,18 @@ function read(reservation_id){
     .first();
 }
 
+function updateStatus(reservation_id, status){
+  return knex("reservations")
+  .select("*")
+  .where({reservation_id})
+  .update({status: status},"*")
+  .then((createdReservations)=> createdReservations[0]);
+}
 
 
 module.exports = {
     create,
     list,
     read,
+    updateStatus,
   };

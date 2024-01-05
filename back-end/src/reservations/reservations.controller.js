@@ -113,6 +113,33 @@ async function readReservation(req, res, next) {
   res.json({ data });
 }
 
+async function updateStatus(req,res,next){
+  const reservation = res.locals.reservation;
+  const status = req.params.status;
+  const data = await service.updateStatus(reservation.reservation_id, status);
+  res.json({data});
+}
+
+function hasValidStatus(req,res,next){
+  const {status} = req.body.data;
+  const curStatus = res.locals.reservation.status;
+
+  if(curStatus === "finished" || curStatus === "cancelled"){
+    next({
+      status: 400,
+      message: "reservation is already finished/cancelled"
+    })
+  }
+  const statusArray = ["booked", "finished", "cancelled", "seated"];
+  if(statusArray.includes(status)){
+    next();
+  }
+  next({
+    status: 400,
+    message: `invalid status ${status}`
+  })
+}
+
 module.exports = {
   list: [asyncErrorBoundary(list)],
   create: [
@@ -123,5 +150,7 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [reservationExists, asyncErrorBoundary(readReservation)],
-  reservationExists
+  reservationExists,
+  updateStatus: [reservationExists, hasValidStatus, asyncErrorBoundary(updateStatus)],
+  
 };

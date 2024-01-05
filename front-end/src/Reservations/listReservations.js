@@ -1,6 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
+
+/**
+ * 
+ * @param {*} time formatted as string in 24hr time
+ * @returns the hour and minute formatted as XX:XX AM/PM
+ */
 function formatTime(time) {
   let hours = time.substring(0, 2);
   const minutes = time.substring(3, 5);
@@ -12,6 +18,12 @@ function formatTime(time) {
 
   return hours + ":" + minutes + post;
 }
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
+
 
 export const ListReservations = ({ reservations }) => {
   let resMap = "";
@@ -31,7 +43,7 @@ export const ListReservations = ({ reservations }) => {
               <p>{reservation.people} Guests</p>
               <p>{formatTime(reservation.reservation_time)}</p>
               <p data-reservation-id-status={reservation.reservation_id}>{reservation.status}</p>
-
+              {reservation.status === "booked" ? (
               <div>
                 <Link
                   className="item"
@@ -40,6 +52,7 @@ export const ListReservations = ({ reservations }) => {
                   Seat
                 </Link>
               </div>
+              ): ""}
             </div>
           ) : (
             <div className="reservations" key={index}></div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { finishTable } from "../utils/api";
+import { finishTable, updateStatus } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 
@@ -21,9 +21,12 @@ export const TableList = ({ tables }) => {
               <b>{table.occupied ? "occupied" : "free"}</b>
             </h5>
             <div>{table.occupied ? <button className="finish" data-table-id-finish={table.table_id} onClick={()=>{
-              finishTable(table.table_id);
 
-              setTimeout(history.go("/dashboard"), 100)}
+              updateStatus(table.reservation_id, "finished");
+              finishTable(table.table_id);
+              
+
+              setTimeout(history.go("/dashboard"), 1000)} //set delay so that all the data is displaying correctly. I know this is a bad way to do it, will try and fix.
             
             }>Finish</button> : ""}
             
