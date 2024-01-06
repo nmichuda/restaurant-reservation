@@ -1,8 +1,8 @@
 import { React, useState } from "react";
-import { useHistory } from "react-router-dom";
+
 import DisplayErrors from "../Reservations/displayErrors";
 import CancelButton from "../layout/CancelButton";
-import { createTable } from "../utils/api";
+
 import { listReservations } from "../utils/api";
 import ListReservations from "../Reservations/listReservations";
 
@@ -12,9 +12,9 @@ function Search() {
 
     const [mobileNumber,setMobileNumber] = useState("");
     const [reservations,setReservations] = useState({})
-    const history = useHistory();
+    
     const [searched, setSearched] = useState(false);
-    const [errors,setErrors] = useState(null);
+    const errors = []
 
     const handleMobileNumberChange = (event) => setMobileNumber(event.target.value);
 

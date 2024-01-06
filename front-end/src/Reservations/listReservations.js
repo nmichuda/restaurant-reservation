@@ -57,6 +57,7 @@ export const ListReservations = ({ reservations, filter }) => {
                 </Link>
               </div>
               ): ""}
+              <Link className="item" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
             </div>
           
         </div>

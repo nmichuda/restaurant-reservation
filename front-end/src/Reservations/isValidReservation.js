@@ -29,8 +29,6 @@ export function isValidReservation(reservation){
         errors.push(new Error("Cannot make reseravtion at that time. Operating hours are from 10:30AM to 10:30PM"))
     }
     
-    console.log(errors);
-    console.log(hours, minutes);
 
     return errors;
 

@@ -27,7 +27,7 @@ function updateStatus(reservation_id, status) {
     .select("*")
     .where({ reservation_id })
     .update({ status: status }, "*")
-    .then((createdRecords) => createdRecords[0]);
+    .then((createdReservations) => createdReservations[0]);
 }
 
 function search(mobile_number) {
@@ -39,6 +39,14 @@ function search(mobile_number) {
     .orderBy("reservation_date");
 }
 
+function update(updatedRes){
+  return knex("reservations")
+  .select("*")
+  .where({reservation_id: updatedRes.reservation_id})
+  .update(updatedRes, "*")
+  .then((createdReservations)=> createdReservations[0])
+}
+
 
 module.exports = {
     create,
@@ -46,5 +54,6 @@ module.exports = {
     read,
     updateStatus,
     search,
+    update,
 
   };

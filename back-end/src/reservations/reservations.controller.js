@@ -15,8 +15,10 @@ const hasAllProperties = hasProperties(
  */
 async function list(req, res) {
   const date = req.query.date;
-  const mobile_number = req.query.mobile_number
-  const data = await (date? service.list(date): service.search(mobile_number));
+  const mobile_number = req.query.mobile_number;
+  const data = await (date
+    ? service.list(date)
+    : service.search(mobile_number));
   res.json({ data });
 }
 
@@ -95,6 +97,7 @@ function hasValidTime(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
+  
   const reservation_id =
     req.params.reservation_id || (req.body.data || {}).reservation_id;
 
@@ -105,7 +108,7 @@ async function reservationExists(req, res, next) {
   }
   next({
     status: 404,
-    message: `Reservation ${reservation_id} cannot be found.`,
+    message: `reservation ${reservation_id} cant be found.`,
   });
 }
 
@@ -124,25 +127,29 @@ function hasValidStatus(req, res, next) {
       message: "reservation is already finished/cancelled",
     });
   }
-  
-  if (status === "booked" || status === "cancelled" || status === "finished" || status === "seated") {
+
+  if (
+    status === "booked" ||
+    status === "cancelled" ||
+    status === "finished" ||
+    status === "seated"
+  ) {
     res.locals.status = status;
     next();
+  } else {
+    next({
+      status: 400,
+      message: `invalid status ${status}`,
+    });
   }
-  else{
-  next({
-    status: 400,
-    message: `invalid status ${status}`,
-  });
-}
 }
 
 async function updateStatus(req, res) {
   const status = res.locals.status;
   const reservation_id = res.locals.reservation.reservation_id;
-  
+
   const data = await service.updateStatus(reservation_id, status);
-  
+
   res.status(200).json({ data });
 }
 
@@ -157,6 +164,14 @@ function newStatus(req, res, next) {
   next();
 }
 
+async function update(req, res, next) {
+  const updatedRes = {
+    ...req.body.data,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+  const data = await service.update(updatedRes);
+  res.status(200).json({ data });
+}
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
@@ -175,5 +190,13 @@ module.exports = {
     asyncErrorBoundary(updateStatus),
   ],
   reservationExists,
-  
+  update: [
+    hasAllProperties,
+    hasValidDate,
+    hasValidPeople,
+    hasValidTime,
+    reservationExists,
+    hasValidStatus,
+    asyncErrorBoundary(update),
+  ],
 };
