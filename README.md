@@ -30,10 +30,16 @@ The search page allows the user to search reservations by phone number.
 <img width="720" alt="Screenshot 2024-01-06 at 3 42 58 PM" src="https://github.com/nmichuda/restaurant-reservation/assets/14095827/a2be8e09-10f5-4070-b2ea-60a637a491bb">
 
 **Installation**
-Fork and clone this repository.
-Run cp ./back-end/.env.sample ./back-end/.env.
-Update the ./back-end/.env file with the connection URL's to your PostgreSQL database instance.
-Run cp ./front-end/.env.sample ./front-end/.env.
-You should not need to make changes to the ./front-end/.env file unless you want to connect to a backend at a location other than http://localhost:5001.
-Run npm install to install project dependencies.
-Run npm run start:dev to start your server in development mode.
+> Fork and clone this repository.
+> 
+> Run cp ./back-end/.env.sample ./back-end/.env.
+> 
+> Update the ./back-end/.env file with the connection URL's to your PostgreSQL database instance.
+> 
+> Run cp ./front-end/.env.sample ./front-end/.env.
+> 
+> You should not need to make changes to the ./front-end/.env file unless you want to connect to a backend at a location other than http://localhost:5001.
+> 
+> Run npm install to install project dependencies.
+> 
+> Run npm run start:dev to start your server in development mode.
