@@ -14,7 +14,7 @@ export const TableList = ({ tables }) => {
           <div className="">
             <div className="item">
                 <div className="">
-            <h2 className="item">Table {table.table_name}</h2>
+            <h2 className="item"> {table.table_name}</h2>
             <h4 className="item">Capacity: {table.capacity} seats</h4>
             <h5 data-table-id-status={table.table_id}>
               {" "}
