@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import CancelButton from "../layout/CancelButton";
 import { isValidReservation } from "./isValidReservation";
 import DisplayErrors from "./displayErrors";
 import { fetchReservation, updateReservation } from "../utils/api";
+import ReservationForm from "./reservationForm";
 
 function EditReservation() {
 
@@ -80,57 +80,12 @@ function EditReservation() {
     }
     return (
         <div>
-        <p>{reservation.reservation_time}</p>
         <h1>Edit Reservation</h1>
         <p></p>
         <DisplayErrors errors={errors}/>
-    <form onSubmit={handleSubmit}>
-        <div className="form-group">
-        <label>
-            First Name:
-            <input id="name" name="name" type="text" required={true} value={reservation.first_name} onChange={changeHandler}/>
-        </label>
-        </div>
-        <div className="form-group">
-        <label>
-            Last Name:
-            <input id="lastname" name="lastname" type="text" required={true} value={reservation.last_name} onChange={changeHandler}/>
-        </label>
-        </div>
-        <div className="form-group">
-        <label>
-            Mobile Number:
-            <input id="number" name="number" type="text" required={true} value={reservation.mobile_number} onChange={changeHandler}/>
-        </label>
-        </div>
-        <div className="form-group">
-        <label>
-            Date:
-            <input id="reservation_date" name="reservation_date" type="date" required={true} value={reservation.reservation_date} onChange={changeHandler}/>
-        </label>
-        </div>
-        <div className="form-group">
-        <label>
-            Reservation Time:
-            <input id="reservation_time" name="reservation_time" type="time" required={true} value={reservation.reservation_time} onChange={changeHandler}/>
-        </label>
-        </div>
-        <div className="form-group">
-        <label>
-            Guests:
-            <input id="people" name="people" type="number" min={1} required={true} value={reservation.people} onChange={changeHandler}/>
-        </label>
-        </div>
-        <CancelButton/>
-        <button type="submit">Submit</button>
-        
-        
+        <ReservationForm changeHandler={changeHandler} handleSubmit={handleSubmit} reservation={reservation}/>
 
-
-
-    </form>
-
-    </div>
+         </div>
     );
   }
   

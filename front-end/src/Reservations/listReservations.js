@@ -37,8 +37,8 @@ export const ListReservations = ({ reservations, filter }) => {
     resMap = filterReservations.map((reservation, index) => {
       
       return (
-        <div>
-            <div className="reservations" key={index}>
+        <div className="reservations" key={reservation.reservation_id}>
+            <div>
               <div>
                 <h5>
                   {reservation.first_name} {reservation.last_name}
