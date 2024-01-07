@@ -23,7 +23,7 @@ return(
 <div className="form-group">
 <label>
     Mobile Number:
-    <input id="number" name="mobile_number" type="text" required={true} value={reservation.mobile_number} onChange={changeHandler}/>
+    <input id="number" name="mobile_number" type="text" pattern="[0-9]*" required={true} value={reservation.mobile_number} onChange={changeHandler}/>
 </label>
 </div>
 <div className="form-group">
@@ -35,7 +35,7 @@ return(
 <div className="form-group">
 <label>
     Reservation Time:
-    <input id="reservation_time" name="reservation_time" type="time" required={true} value={reservation.reservation_time} onChange={changeHandler}/>
+    <input id="reservation_time" name="reservation_time" type="time"  required={true} value={reservation.reservation_time} onChange={changeHandler}/>
 </label>
 </div>
 <div className="form-group">

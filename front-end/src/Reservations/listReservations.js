@@ -12,7 +12,7 @@ function formatTime(time) {
   const minutes = time.substring(3, 5);
   let post = "AM";
   if (hours > 12) {
-    hours = 24 - hours;
+    hours = hours - 12;
     post = "PM";
   }
 
