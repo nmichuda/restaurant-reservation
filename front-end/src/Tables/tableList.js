@@ -26,7 +26,7 @@ export const TableList = ({ tables }) => {
               await finishTable(table.table_id);
               
 
-              history.go("/dashboard")} //set delay so that all the data is displaying correctly. I know this is a bad way to do it, will try and fix.
+              history.push("/")} //set delay so that all the data is displaying correctly. I know this is a bad way to do it, will try and fix.
             
             }>Finish</button> : ""}
             
