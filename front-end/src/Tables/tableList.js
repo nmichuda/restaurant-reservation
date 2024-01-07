@@ -20,13 +20,13 @@ export const TableList = ({ tables }) => {
               {" "}
               <b>{table.occupied ? "occupied" : "free"}</b>
             </h5>
-            <div>{table.occupied ? <button className="finish" data-table-id-finish={table.table_id} onClick={()=>{
+            <div>{table.occupied ? <button className="finish" data-table-id-finish={table.table_id} onClick={async ()=>{
 
               updateStatus(table.reservation_id, "finished");
-              finishTable(table.table_id);
+              await finishTable(table.table_id);
               
 
-              setTimeout(history.push("/dashboard"), 1000)} //set delay so that all the data is displaying correctly. I know this is a bad way to do it, will try and fix.
+              history.go("/dashboard")} //set delay so that all the data is displaying correctly. I know this is a bad way to do it, will try and fix.
             
             }>Finish</button> : ""}
             
