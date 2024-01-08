@@ -21,12 +21,14 @@ export const TableList = ({ tables }) => {
               <b>{table.occupied ? "occupied" : "free"}</b>
             </h5>
             <div>{table.occupied ? <button className="finish" data-table-id-finish={table.table_id} onClick={async ()=>{
-
+              const confirm = window.confirm("Is this table ready to seat new guests? This cannot be undone.");
+              if(confirm){
               updateStatus(table.reservation_id, "finished");
               await finishTable(table.table_id);
               
 
               history.push("/")}
+            }
             
             }>Finish</button> : ""}
             
