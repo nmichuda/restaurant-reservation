@@ -5,6 +5,7 @@ import { previous, next, today } from "../utils/date-time";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import TableList from "../Tables/tableList";
 import ListReservations from "../Reservations/listReservations";
+import { updateStatus } from "../utils/api";
 
 /**
  * Defines the dashboard page.
@@ -32,6 +33,15 @@ function Dashboard({ date }) {
       
     return () => abortController.abort();
   }
+
+  const cancelHandler = async (event)=>{
+    const confirm = window.confirm("Do you want to cancel this reservation? This cannot be undone.");
+    if(confirm){
+      await updateStatus(event.target.value, "cancelled");
+      console.log("status updated");
+      loadDashboard();
+    }
+  }
   
 
   return (
@@ -42,7 +52,7 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
      
-      <ListReservations reservations={reservations} filter={true}/>
+      <ListReservations reservations={reservations} filter={true} cancelHandler={cancelHandler}/>
       <TableList tables = {tables}/>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${previous(date)}`)}>Previous</button>
       <button type="button" onClick ={()=>history.push(`/dashboard?date=${today()}`)}>Today</button>

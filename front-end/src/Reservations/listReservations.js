@@ -25,7 +25,7 @@ function formatTime(time) {
  */
 
 
-export const ListReservations = ({ reservations, filter }) => {
+export const ListReservations = ({ reservations, filter, cancelHandler }) => {
   let resMap = "";
   let filterReservations = reservations;
   if(filter){
@@ -58,6 +58,7 @@ export const ListReservations = ({ reservations, filter }) => {
               </div>
               ): ""}
               <Link className="item" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
+              <button type="button" data-reservation-id-cancel={reservation.reservation_id} value={reservation.reservation_id} onClick={cancelHandler}>Cancel</button>
             </div>
           
         </div>

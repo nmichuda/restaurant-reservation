@@ -23,7 +23,7 @@ return(
 <div className="form-group">
 <label>
     Mobile Number:
-    <input id="number" name="mobile_number" type="text" pattern="[0-9]*" required={true} value={reservation.mobile_number} onChange={changeHandler}/>
+    <input id="number" name="mobile_number" type="text" required={true} minLength={9} pattern= "^[0-9\-]+$" value={reservation.mobile_number} onChange={changeHandler}/>
 </label>
 </div>
 <div className="form-group">
