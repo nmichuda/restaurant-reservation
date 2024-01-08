@@ -58,6 +58,7 @@ export const ListReservations = ({ reservations, filter, cancelHandler }) => {
               </div>
               ): ""}
               <Link className="item" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
+              <br></br>
               <button type="button" data-reservation-id-cancel={reservation.reservation_id} value={reservation.reservation_id} onClick={cancelHandler}>Cancel</button>
             </div>
           
